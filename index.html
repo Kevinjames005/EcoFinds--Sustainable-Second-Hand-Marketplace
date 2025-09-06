@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoFinds Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+            },
+            colors: {
+              'e-black': '#1A201A',
+              'e-white': '#F1F2E6',
+              'e-gold': '#FFC700',
+              'e-danger': '#e53e3e',
+              'e-gray': {
+                DEFAULT: '#A3A39A',
+                light: '#BDBDAF',
+                dark: '#242C24',
+                'darker': '#1E241E',
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background-color: #1A201A; /* e-black */
+        color: #F1F2E6; /* e-white */
+        overflow-x: hidden;
+      }
+      
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1E241E;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #242C24;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #3a443a;
+      }
+      
+      *:focus {
+        outline: none;
+      }
+
+      /* Particle Background */
+      @keyframes move-particles {
+          from { transform: translateY(0); }
+          to { transform: translateY(-2000px); }
+      }
+      #particle-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+      }
+      .particles {
+        position: absolute;
+        width: 100%;
+        height: 300%;
+        animation: move-particles 50s linear infinite;
+      }
+      .particles.p1 {
+        background-image: radial-gradient(circle, #FFC700 1px, transparent 1.5px);
+        background-size: 3rem 3rem;
+        opacity: 0.5;
+      }
+      .particles.p2 {
+        background-image: radial-gradient(circle, #FFC700 1px, transparent 1.5px);
+        background-size: 5rem 5rem;
+        animation-duration: 75s;
+        opacity: 0.3;
+      }
+      .particles.p3 {
+        background-image: radial-gradient(circle, #FFC700 1px, transparent 1.5px);
+        background-size: 7rem 7rem;
+        animation-duration: 100s;
+        opacity: 0.2;
+      }
+
+      /* Scroll Animation Classes */
+      .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .scroll-animate.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* New Ellipsus-inspired Button Style */
+      .uiverse-btn {
+        font-size: 14px;
+        font-weight: 500;
+        position: relative;
+        padding: 0.8em 1.8em;
+        border: 1px solid var(--btn-color, #FFC700);
+        background: transparent;
+        color: var(--btn-color, #FFC700);
+        transition: color 0.4s;
+        overflow: hidden;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+      }
+
+      .uiverse-btn span {
+        position: relative;
+        z-index: 2;
+      }
+
+      .uiverse-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--btn-color, #FFC700);
+        transform: translateX(-100%);
+        transition: transform 0.4s cubic-bezier(0.7, 0, 0.2, 1);
+        z-index: 1;
+      }
+
+      .uiverse-btn:hover::before {
+        transform: translateX(0);
+      }
+      
+      .uiverse-btn:hover {
+        color: var(--btn-hover-text-color, #1A201A);
+      }
+
+      .uiverse-btn:active {
+        transform: scale(0.98);
+      }
+
+      /* Variants */
+      .uiverse-btn-primary { --btn-color: #FFC700; --btn-hover-text-color: #1A201A; }
+      .uiverse-btn-secondary { --btn-color: #A3A39A; --btn-hover-text-color: #1A201A; }
+      .uiverse-btn-dark { --btn-color: #F1F2E6; --btn-hover-text-color: #1A201A; }
+      .uiverse-btn-danger { --btn-color: #e53e3e; --btn-hover-text-color: #F1F2E6; }
+
+
+      .uiverse-btn:disabled {
+        --btn-color: #333333;
+        color: #333333;
+        cursor: not-allowed;
+        background: transparent;
+      }
+      .uiverse-btn:disabled:hover::before {
+        transform: translateX(-100%);
+      }
+      .uiverse-btn:disabled:hover {
+          color: #333333;
+      }
+
+      /* From Uiverse.io by dovatgabriel */
+      .three-body {
+        --uib-size: 35px;
+        --uib-speed: 0.8s;
+        --uib-color: #FFC700; /* e-gold */
+        position: relative;
+        display: inline-block;
+        height: var(--uib-size);
+        width: var(--uib-size);
+        animation: spin78236 calc(var(--uib-speed) * 2.5) infinite linear;
+      }
+
+      .three-body__dot {
+        position: absolute;
+        height: 100%;
+        width: 30%;
+      }
+
+      .three-body__dot:after {
+        content: '';
+        position: absolute;
+        height: 0%;
+        width: 100%;
+        padding-bottom: 100%;
+        background-color: var(--uib-color);
+        border-radius: 50%;
+      }
+
+      .three-body__dot:nth-child(1) {
+        bottom: 5%;
+        left: 0;
+        transform: rotate(60deg);
+        transform-origin: 50% 85%;
+      }
+
+      .three-body__dot:nth-child(1)::after {
+        bottom: 0;
+        left: 0;
+        animation: wobble1 var(--uib-speed) infinite ease-in-out;
+        animation-delay: calc(var(--uib-speed) * -0.3);
+      }
+
+      .three-body__dot:nth-child(2) {
+        bottom: 5%;
+        right: 0;
+        transform: rotate(-60deg);
+        transform-origin: 50% 85%;
+      }
+
+      .three-body__dot:nth-child(2)::after {
+        bottom: 0;
+        left: 0;
+        animation: wobble1 var(--uib-speed) infinite
+          calc(var(--uib-speed) * -0.15) ease-in-out;
+      }
+
+      .three-body__dot:nth-child(3) {
+        bottom: -5%;
+        left: 0;
+        transform: translateX(116.666%);
+      }
+
+      .three-body__dot:nth-child(3)::after {
+        top: 0;
+        left: 0;
+        animation: wobble2 var(--uib-speed) infinite ease-in-out;
+      }
+
+      @keyframes spin78236 {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes wobble1 {
+        0%,
+        100% {
+          transform: translateY(0%) scale(1);
+          opacity: 1;
+        }
+
+        50% {
+          transform: translateY(-66%) scale(0.65);
+          opacity: 0.8;
+        }
+      }
+
+      @keyframes wobble2 {
+        0%,
+        100% {
+          transform: translateY(0%) scale(1);
+          opacity: 1;
+        }
+
+        50% {
+          transform: translateY(66%) scale(0.65);
+          opacity: 0.8;
+        }
+      }
+      
+      .uib-override {
+        --uib-size: 20px;
+        --uib-speed: 1s;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.8.2",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.17.0"
+  }
+}
+</script>
+<!-- Add Babel Standalone for in-browser transpilation -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!-- Change script type to text/babel and use a relative path -->
+    <script type="text/babel" data-type="module" src="./index.tsx"></script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
